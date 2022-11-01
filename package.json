@@ -1,0 +1,22 @@
+{
+  "name": "tomtebloss-voice-notify",
+  "version": "1.0.0",
+  "description": "voice channel notification module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Octaphous/tomtebloss-voice-notify.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Octaphous/tomtebloss-voice-notify/issues"
+  },
+  "homepage": "https://github.com/Octaphous/tomtebloss-voice-notify#readme",
+  "dependencies": {
+    "discord.js": "^14.6.0"
+  }
+}
