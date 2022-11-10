@@ -2,19 +2,23 @@ const { ButtonBuilder, ActionRowBuilder, ButtonStyle } = require("discord.js");
 
 module.exports.commands = [
     {
+        name: "toggle-voice-notifications",
+        description: "Aktivera och avaktivera röstnotiser",
+    },
+    {
         name: "set-voice-notify-channel",
         default_member_permissions: 0,
-        description: "Send voice channel notifications in this channel",
+        description: "Skicka framtida röstnotiser i denna kanal",
     },
     {
         name: "set-voice-notify-mute-role",
         default_member_permissions: 0,
-        description: "Set voice notification channel mute role",
+        description: "Sätter en roll för att tysta röstnotiser",
         options: [
             {
                 name: "mute-role",
                 type: 8,
-                description: "Role that mutes voice notifications",
+                description: "Roll som döljer kanalen för röstnotiser",
                 required: true,
             },
         ],
@@ -67,19 +71,34 @@ module.exports.init = function (client, logger, storage) {
         // Slash Command Handler
         if (interaction.isChatInputCommand()) {
             switch (interaction.commandName) {
+                case "toggle-voice-notifications": {
+                    let roleId = storage.retrieve("voice-notify-mute-role");
+                    let role = await interaction.guild.roles.fetch(roleId);
+                    if (interaction.member.has(roleId)) {
+                        await interaction.member.roles.remove(role);
+                        interaction.reply({ content: "Röstnotiser har dolts!", ephemeral: true });
+                    } else {
+                        await interaction.member.roles.add(role);
+                        interaction.reply({ content: "Röstnotiser visas åter.", ephemeral: true });
+                    }
+                    break;
+                }
+
                 // Command to change notification channel
-                case "set-voice-notify-channel":
+                case "set-voice-notify-channel": {
                     storage.store("voice-notify-channel-id", interaction.channelId);
-                    interaction.reply("This is now the new voice notification channel.");
+                    interaction.reply("Den här kanalen är nu kanalen för röstnotiser.");
                     logger(`<#${interaction.channelId}> is now the new voice notification channel.`);
                     break;
+                }
 
                 // Command to change notifications mute role
-                case "set-voice-notify-mute-role":
+                case "set-voice-notify-mute-role": {
                     let roleId = interaction.options.getRole("mute-role").id;
                     storage.store("voice-notify-mute-role", roleId);
                     interaction.reply("Applied new role.");
-                    logger(`<@&${roleId}> is now the new voice notification mute role.`);
+                    logger(`<@&${roleId}> är nu rollen för att tysta röstnotiser.`);
+                }
             }
         }
     });
