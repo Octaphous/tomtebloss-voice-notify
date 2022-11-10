@@ -74,12 +74,14 @@ module.exports.init = function (client, logger, storage) {
                 case "toggle-voice-notifications": {
                     let roleId = storage.retrieve("voice-notify-mute-role");
                     let role = await interaction.guild.roles.fetch(roleId);
-                    if (interaction.member.has(roleId)) {
+                    if (interaction.member.roles.cache.has(roleId)) {
+                        // Show notifications
                         await interaction.member.roles.remove(role);
-                        interaction.reply({ content: "Röstnotiser har dolts!", ephemeral: true });
-                    } else {
-                        await interaction.member.roles.add(role);
                         interaction.reply({ content: "Röstnotiser visas åter.", ephemeral: true });
+                    } else {
+                        // Hide notifications
+                        await interaction.member.roles.add(role);
+                        interaction.reply({ content: "Röstnotiser har dolts!", ephemeral: true });
                     }
                     break;
                 }
