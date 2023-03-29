@@ -50,7 +50,7 @@ module.exports.init = function (client, logger, storage) {
 
         // Send message
         notifyChannel.send({
-            content: `@here <@!${newState.member.id}> gick just med i röstkanalen <#${newState.channelId}>`,
+            content: `@everyone <@!${newState.member.id}> gick just med i röstkanalen <#${newState.channelId}>`,
             components: muteRole ? [btnRow] : undefined,
         });
     });
